@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../context/app-provider";
+import shapes from "../../utils/shape-type";
 
 function useLine({ board, ctx, updateState }) {
   const { state } = useContext(AppContext);
@@ -8,7 +9,7 @@ function useLine({ board, ctx, updateState }) {
   const [lastCoordinate, setLastCoordinate] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (!board || !ctx || state.shape !== "LINE") return;
+    if (!board || !ctx || state.shape !== shapes.line) return;
 
     const drawLine = (e) => {
       ctx.strokeStyle = "blue";

@@ -6,6 +6,7 @@ import useLine from "../../components/custom-hooks/use-line";
 import useCircle from "../../components/custom-hooks/use-circle";
 import useRectangle from "../../components/custom-hooks/use-rectangle";
 import useSquare from "../../components/custom-hooks/use-square";
+import shapes from "../../utils/shape-type";
 
 const DrawingBoard = () => {
   const { state } = useContext(AppContext);
@@ -49,19 +50,19 @@ const DrawingBoard = () => {
 
       ctx.beginPath();
       switch (shape.type) {
-        case "LINE":
+        case shapes.line:
           ctx.moveTo(shape.x1, shape.y1);
           ctx.lineTo(shape.x2, shape.y2);
           break;
-        case "CIRCLE":
+        case shapes.circle:
           ctx.arc(shape.x1, shape.y1, shape.radius, 0, 2 * Math.PI);
           break;
-        case "RECTANGLE":
+        case shapes.rectangle:
           const width = shape.x2 - shape.x1;
           const height = shape.y2 - shape.y1;
           ctx.rect(shape.x1, shape.y1, width, height);
           break;
-        case "SQUARE": {
+        case shapes.square: {
           ctx.rect(shape.x1, shape.y1, shape.length, shape.length);
           break;
         }

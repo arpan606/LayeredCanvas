@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../context/app-provider";
+import shapes from "../../utils/shape-type";
 
 function useCircle({ updateState, overlayBoard, overlayCtx }) {
   const { state } = useContext(AppContext);
@@ -9,7 +10,7 @@ function useCircle({ updateState, overlayBoard, overlayCtx }) {
   const [lastCoordinate, setLastCoordinate] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (!overlayBoard || !overlayCtx || state.shape !== "CIRCLE") return;
+    if (!overlayBoard || !overlayCtx || state.shape !== shapes.circle) return;
 
     const getRadius = (x1, x2, y1, y2) => {
       const r = Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);

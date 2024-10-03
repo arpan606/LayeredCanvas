@@ -1,8 +1,9 @@
 import { createContext, useReducer } from "react";
+import shapes from "../utils/shape-type";
 
 // INIITAL STATE
 const initialState = {
-  shape: "LINE",
+  shape: shapes.line,
   screens: [],
 };
 

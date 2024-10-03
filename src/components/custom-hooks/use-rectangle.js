@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../context/app-provider";
+import shapes from "../../utils/shape-type";
 
 function useRectangle({ updateState, overlayBoard, overlayCtx }) {
   const { state } = useContext(AppContext);
@@ -9,7 +10,8 @@ function useRectangle({ updateState, overlayBoard, overlayCtx }) {
   const [lastCoordinate, setLastCoordinate] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (!overlayBoard || !overlayCtx || state.shape !== "RECTANGLE") return;
+    if (!overlayBoard || !overlayCtx || state.shape !== shapes.rectangle)
+      return;
 
     const drawRectangle = (e) => {
       overlayCtx.clearRect(0, 0, overlayBoard.width, overlayBoard.height);
@@ -32,14 +34,14 @@ function useRectangle({ updateState, overlayBoard, overlayCtx }) {
     const handleMouseUp = () => {
       updateState({
         x1: initialCoordinate.x,
-        x2: lastCoordinate.x ,
+        x2: lastCoordinate.x,
         y1: initialCoordinate.y,
         y2: lastCoordinate.y,
         type: "RECTANGLE",
         strokeStyle: overlayCtx.strokeStyle,
         lineWidth: overlayCtx.lineWidth,
       });
-    
+
       setIsDrawing(false);
     };
 

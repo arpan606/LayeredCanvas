@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../context/app-provider";
+import shapes from "../../utils/shape-type";
 
 function useSquare({ updateState, overlayBoard, overlayCtx }) {
   const { state } = useContext(AppContext);
@@ -9,7 +10,7 @@ function useSquare({ updateState, overlayBoard, overlayCtx }) {
   const [lastCoordinate, setLastCoordinate] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (!overlayBoard || !overlayCtx || state.shape !== "SQUARE") return;
+    if (!overlayBoard || !overlayCtx || state.shape !== shapes.square) return;
 
     const drawRectangle = (e) => {
       overlayCtx.clearRect(0, 0, overlayBoard.width, overlayBoard.height);
