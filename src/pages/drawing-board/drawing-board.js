@@ -6,6 +6,9 @@ import useLine from "../../components/custom-hooks/use-line";
 import useCircle from "../../components/custom-hooks/use-circle";
 import useRectangle from "../../components/custom-hooks/use-rectangle";
 import useSquare from "../../components/custom-hooks/use-square";
+import useConcentricCircle from "../../components/custom-hooks/use-concentric-circle";
+import useConcentricRectangle from "../../components/custom-hooks/use-concentric-rectangle";
+import useConcentricSquare from "../../components/custom-hooks/use-concentric-square";
 import shapes from "../../utils/shape-type";
 
 const DrawingBoard = () => {
@@ -62,10 +65,20 @@ const DrawingBoard = () => {
           const height = shape.y2 - shape.y1;
           ctx.rect(shape.x1, shape.y1, width, height);
           break;
-        case shapes.square: {
+        case shapes.square:
           ctx.rect(shape.x1, shape.y1, shape.length, shape.length);
           break;
-        }
+        case shapes.concentric_circle:
+          ctx.arc(shape.x1, shape.y1, shape.radius, 0, 2 * Math.PI);
+          break;
+        case shapes.concentric_recatangle:
+          const cWidth = shape.x2 - shape.x1;
+          const cHeight = shape.y2 - shape.y1;
+          ctx.rect(shape.x1, shape.y1, cWidth, cHeight);
+          break;
+        case shapes.concentric_square:
+          ctx.rect(shape.x1, shape.y1, shape.length, shape.length);
+          break;
         default:
           break;
       }
@@ -109,6 +122,21 @@ const DrawingBoard = () => {
     updateState: handleCanvasState,
     overlayBoard: overlayCanvasRef.current,
     overlayCtx,
+  });
+  useConcentricCircle({
+    board: canvasRef.current,
+    ctx,
+    updateState: handleCanvasState,
+  });
+  useConcentricRectangle({
+    board: canvasRef.current,
+    ctx,
+    updateState: handleCanvasState,
+  });
+  useConcentricSquare({
+    board: canvasRef.current,
+    ctx,
+    updateState: handleCanvasState,
   });
 
   return (

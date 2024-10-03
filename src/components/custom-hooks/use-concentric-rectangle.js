@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../context/app-provider";
 import shapes from "../../utils/shape-type";
 
-function useSquare({ updateState, overlayBoard, overlayCtx }) {
+function useRectangle({ board, ctx, updateState }) {
   const { state } = useContext(AppContext);
 
   const [isDrawing, setIsDrawing] = useState(false);
@@ -10,28 +10,29 @@ function useSquare({ updateState, overlayBoard, overlayCtx }) {
   const [lastCoordinate, setLastCoordinate] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (!overlayBoard || !overlayCtx || state.shape !== shapes.square) return;
+    if (!board || !ctx || state.shape !== shapes.concentric_recatangle) return;
 
-    const drawSquare = (e) => {
-      overlayCtx.clearRect(0, 0, overlayBoard.width, overlayBoard.height);
+    const drawRectangle = (e) => {
+      setLastCoordinate({ x: e.offsetX, y: e.offsetY });
 
-      overlayCtx.strokeRect(
+      if (lastCoordinate.x === -1 && lastCoordinate.y === -1) return;
+
+      ctx.strokeRect(
         initialCoordinate.x,
         initialCoordinate.y,
         e.offsetX - initialCoordinate.x,
-        e.offsetX - initialCoordinate.x
+        e.offsetY - initialCoordinate.y
       );
 
       updateState({
         x1: initialCoordinate.x,
+        x2: lastCoordinate.x,
         y1: initialCoordinate.y,
-        length: lastCoordinate.x - initialCoordinate.x,
-        type: "SQUARE",
-        strokeStyle: overlayCtx.strokeStyle,
-        lineWidth: overlayCtx.lineWidth,
+        y2: lastCoordinate.y,
+        type: "RECTANGLE",
+        strokeStyle: ctx.strokeStyle,
+        lineWidth: ctx.lineWidth,
       });
-
-      setLastCoordinate({ x: e.offsetX, y: e.offsetY });
     };
 
     const handleMouseDown = (e) => {
@@ -41,33 +42,36 @@ function useSquare({ updateState, overlayBoard, overlayCtx }) {
 
     const handleMouseUp = () => {
       setIsDrawing(false);
+      setLastCoordinate({ x: -1, y: -1 });
     };
 
     const handleMouseMove = (e) => {
       if (!isDrawing) return;
-      drawSquare(e);
+      drawRectangle(e);
     };
 
-    overlayBoard.addEventListener("mousedown", handleMouseDown);
-    overlayBoard.addEventListener("mouseup", handleMouseUp);
-    overlayBoard.addEventListener("mousemove", handleMouseMove);
+    board.addEventListener("mousedown", handleMouseDown);
+    board.addEventListener("mouseup", handleMouseUp);
+    board.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      overlayBoard.removeEventListener("mousedown", handleMouseDown);
-      overlayBoard.removeEventListener("mouseup", handleMouseUp);
-      overlayBoard.removeEventListener("mousemove", handleMouseMove);
+      board.removeEventListener("mousedown", handleMouseDown);
+      board.removeEventListener("mouseup", handleMouseUp);
+      board.removeEventListener("mousemove", handleMouseMove);
     };
   }, [
-    overlayBoard,
-    overlayCtx,
+    board,
+    ctx,
     isDrawing,
     initialCoordinate,
     state,
     updateState,
+    lastCoordinate.offsetX,
+    lastCoordinate.y,
     lastCoordinate.x,
   ]);
 
   return {};
 }
 
-export default useSquare;
+export default useRectangle;
