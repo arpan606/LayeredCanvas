@@ -6,7 +6,7 @@ function useConcentricSquare({ board, ctx, updateState }) {
   const { state } = useContext(AppContext);
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [initialCoordinate, setInitialCoordinate] = useState({ x: 0, y: 0 });
+  const [initialCoordinate, setInitialCoordinate] = useState({ x: -1, y: -1 });
   const [lastCoordinate, setLastCoordinate] = useState({ x: -1, y: -1 });
 
   useEffect(() => {
@@ -15,7 +15,12 @@ function useConcentricSquare({ board, ctx, updateState }) {
     const drawSquare = (e) => {
       setLastCoordinate({ x: e.offsetX, y: e.offsetY });
 
-      if (lastCoordinate.x === -1 && lastCoordinate.y === -1) return;
+      if (
+        (lastCoordinate.x === -1 && lastCoordinate.y === -1) ||
+        (initialCoordinate.x === -1 && initialCoordinate.y === -1)
+      ) {
+        return;
+      }
 
       ctx.strokeRect(
         initialCoordinate.x,
@@ -42,6 +47,7 @@ function useConcentricSquare({ board, ctx, updateState }) {
     const handleMouseUp = () => {
       setIsDrawing(false);
       setLastCoordinate({ x: -1, y: -1 });
+      setInitialCoordinate({ x: -1, y: -1 });
     };
 
     const handleMouseMove = (e) => {

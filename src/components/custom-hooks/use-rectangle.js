@@ -6,15 +6,23 @@ function useRectangle({ updateState, overlayBoard, overlayCtx }) {
   const { state } = useContext(AppContext);
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [initialCoordinate, setInitialCoordinate] = useState({ x: 0, y: 0 });
-  const [lastCoordinate, setLastCoordinate] = useState({ x: 0, y: 0 });
+  const [initialCoordinate, setInitialCoordinate] = useState({ x: -1, y: -1 });
+  const [lastCoordinate, setLastCoordinate] = useState({ x: -1, y: -1 });
 
   useEffect(() => {
     if (!overlayBoard || !overlayCtx || state.shape !== shapes.rectangle)
       return;
 
     const drawRectangle = (e) => {
+      setLastCoordinate({ x: e.offsetX, y: e.offsetY });
       overlayCtx.clearRect(0, 0, overlayBoard.width, overlayBoard.height);
+
+      if (
+        (lastCoordinate.x === -1 && lastCoordinate.y === -1) ||
+        (initialCoordinate.x === -1 && initialCoordinate.y === -1)
+      ) {
+        return;
+      }
 
       overlayCtx.strokeRect(
         initialCoordinate.x,
@@ -22,8 +30,6 @@ function useRectangle({ updateState, overlayBoard, overlayCtx }) {
         e.offsetX - initialCoordinate.x,
         e.offsetY - initialCoordinate.y
       );
-
-      setLastCoordinate({ x: e.offsetX, y: e.offsetY });
     };
 
     const handleMouseDown = (e) => {
@@ -32,16 +38,25 @@ function useRectangle({ updateState, overlayBoard, overlayCtx }) {
     };
 
     const handleMouseUp = () => {
-      updateState({
-        x1: initialCoordinate.x,
-        x2: lastCoordinate.x,
-        y1: initialCoordinate.y,
-        y2: lastCoordinate.y,
-        type: "RECTANGLE",
-        strokeStyle: overlayCtx.strokeStyle,
-        lineWidth: overlayCtx.lineWidth,
-      });
+      if (
+        lastCoordinate.x !== -1 &&
+        lastCoordinate.y !== -1 &&
+        initialCoordinate.x !== -1 &&
+        initialCoordinate.y !== -1
+      ) {
+        updateState({
+          x1: initialCoordinate.x,
+          x2: lastCoordinate.x,
+          y1: initialCoordinate.y,
+          y2: lastCoordinate.y,
+          type: "RECTANGLE",
+          strokeStyle: overlayCtx.strokeStyle,
+          lineWidth: overlayCtx.lineWidth,
+        });
+      }
 
+      setLastCoordinate({ x: -1, y: -1 });
+      setInitialCoordinate({ x: -1, y: -1 });
       setIsDrawing(false);
     };
 

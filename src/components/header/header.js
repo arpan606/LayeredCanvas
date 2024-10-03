@@ -10,6 +10,7 @@ import shapes from "../../utils/shape-type";
 import AnimationOutlinedIcon from "@mui/icons-material/AnimationOutlined";
 import AutoAwesomeMotionOutlinedIcon from "@mui/icons-material/AutoAwesomeMotionOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import RadioButtonCheckedOutlinedIcon from "@mui/icons-material/RadioButtonCheckedOutlined";
 
 const Header = () => {
   const { dispatch } = useContext(AppContext);
@@ -36,7 +37,7 @@ const Header = () => {
         color="inherit"
         onClick={() => changeShape(shapes.concentric_circle)}
       >
-        <AnimationOutlinedIcon color="inherit" fontSize="medium" />
+        <RadioButtonCheckedOutlinedIcon color="inherit" fontSize="medium" />
       </IconButton>
       <IconButton
         color="inherit"
@@ -49,6 +50,12 @@ const Header = () => {
         onClick={() => changeShape(shapes.concentric_square)}
       >
         <AutoAwesomeMotionOutlinedIcon color="inherit" fontSize="medium" />
+      </IconButton>
+      <IconButton
+        color="inherit"
+        onClick={() => changeShape(shapes.animated_circle)}
+      >
+        <AnimationOutlinedIcon color="inherit" fontSize="medium" />
       </IconButton>
     </div>
   );

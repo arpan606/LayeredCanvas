@@ -6,14 +6,22 @@ function useSquare({ updateState, overlayBoard, overlayCtx }) {
   const { state } = useContext(AppContext);
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [initialCoordinate, setInitialCoordinate] = useState({ x: 0, y: 0 });
-  const [lastCoordinate, setLastCoordinate] = useState({ x: 0, y: 0 });
+  const [initialCoordinate, setInitialCoordinate] = useState({ x: -1, y: -1 });
+  const [lastCoordinate, setLastCoordinate] = useState({ x: -1, y: -1 });
 
   useEffect(() => {
     if (!overlayBoard || !overlayCtx || state.shape !== shapes.square) return;
 
     const drawSquare = (e) => {
       overlayCtx.clearRect(0, 0, overlayBoard.width, overlayBoard.height);
+      setLastCoordinate({ x: e.offsetX, y: e.offsetY });
+
+      if (
+        (lastCoordinate.x === -1 && lastCoordinate.y === -1) ||
+        (initialCoordinate.x === -1 && initialCoordinate.y === -1)
+      ) {
+        return;
+      }
 
       overlayCtx.strokeRect(
         initialCoordinate.x,
@@ -21,17 +29,6 @@ function useSquare({ updateState, overlayBoard, overlayCtx }) {
         e.offsetX - initialCoordinate.x,
         e.offsetX - initialCoordinate.x
       );
-
-      updateState({
-        x1: initialCoordinate.x,
-        y1: initialCoordinate.y,
-        length: lastCoordinate.x - initialCoordinate.x,
-        type: "SQUARE",
-        strokeStyle: overlayCtx.strokeStyle,
-        lineWidth: overlayCtx.lineWidth,
-      });
-
-      setLastCoordinate({ x: e.offsetX, y: e.offsetY });
     };
 
     const handleMouseDown = (e) => {
@@ -40,6 +37,24 @@ function useSquare({ updateState, overlayBoard, overlayCtx }) {
     };
 
     const handleMouseUp = () => {
+      if (
+        lastCoordinate.x !== -1 &&
+        lastCoordinate.y !== -1 &&
+        initialCoordinate.x !== -1 &&
+        initialCoordinate.y !== -1
+      ) {
+        updateState({
+          x1: initialCoordinate.x,
+          y1: initialCoordinate.y,
+          length: lastCoordinate.x - initialCoordinate.x,
+          type: "SQUARE",
+          strokeStyle: overlayCtx.strokeStyle,
+          lineWidth: overlayCtx.lineWidth,
+        });
+      }
+
+      setLastCoordinate({ x: -1, y: -1 });
+      setInitialCoordinate({ x: -1, y: -1 });
       setIsDrawing(false);
     };
 
@@ -57,15 +72,7 @@ function useSquare({ updateState, overlayBoard, overlayCtx }) {
       overlayBoard.removeEventListener("mouseup", handleMouseUp);
       overlayBoard.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [
-    overlayBoard,
-    overlayCtx,
-    isDrawing,
-    initialCoordinate,
-    state,
-    updateState,
-    lastCoordinate.x,
-  ]);
+  }, [overlayBoard, overlayCtx, isDrawing, initialCoordinate, state, updateState, lastCoordinate.x, lastCoordinate.y]);
 
   return {};
 }

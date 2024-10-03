@@ -10,6 +10,7 @@ import useConcentricCircle from "../../components/custom-hooks/use-concentric-ci
 import useConcentricRectangle from "../../components/custom-hooks/use-concentric-rectangle";
 import useConcentricSquare from "../../components/custom-hooks/use-concentric-square";
 import shapes from "../../utils/shape-type";
+import useAnimatedCircle from "../../components/custom-hooks/use-animated-circle";
 
 const DrawingBoard = () => {
   const { state } = useContext(AppContext);
@@ -68,6 +69,7 @@ const DrawingBoard = () => {
         case shapes.square:
           ctx.rect(shape.x1, shape.y1, shape.length, shape.length);
           break;
+        case shapes.animated_circle:
         case shapes.concentric_circle:
           ctx.arc(shape.x1, shape.y1, shape.radius, 0, 2 * Math.PI);
           break;
@@ -134,6 +136,11 @@ const DrawingBoard = () => {
     updateState: handleCanvasState,
   });
   useConcentricSquare({
+    board: canvasRef.current,
+    ctx,
+    updateState: handleCanvasState,
+  });
+  useAnimatedCircle({
     board: canvasRef.current,
     ctx,
     updateState: handleCanvasState,
