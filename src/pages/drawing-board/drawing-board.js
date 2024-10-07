@@ -13,7 +13,11 @@ import shapes from "../../utils/shape-type";
 import useAnimatedCircle from "../../components/custom-hooks/use-animated-circle";
 
 const DrawingBoard = () => {
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
+
+  // width, height
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
   // Main and overlay canvas refs
   const canvasRef = useRef();
@@ -22,6 +26,8 @@ const DrawingBoard = () => {
   // Store canvas state for all shapes
   const [canvasState, setCanvasState] = useState([]);
   const prevShapes = useRef([]);
+  const [canvasId, setCanvasId] = useState(-1);
+  
 
   // Initialize canvas contexts
   const initializeCanvas = useCallback(() => {
@@ -95,18 +101,48 @@ const DrawingBoard = () => {
   useEffect(() => {
     if (!overlayCanvasRef.current) return;
     overlayCanvasRef.current.style.display = [
-      "CIRCLE",
-      "SQUARE",
-      "RECTANGLE",
+      shapes.circle,
+      shapes.square,
+      shapes.rectangle,
     ].includes(state?.shape)
       ? "flex"
       : "none";
   }, [state?.shape]);
 
   // Store canvas state
-  const handleCanvasState = useCallback((drawEvent) => {
-    setCanvasState((prev) => [...prev, drawEvent]);
-  }, []);
+  const handleCanvasState = useCallback(
+    (drawEvent) => {
+      setCanvasState((prev) => [...prev, drawEvent]);
+      dispatch({
+        type: "UPDATE_SCREEN",
+        idx: state.currentScreenId,
+        screen: {
+          screenHeight: height,
+          screenWidth: width,
+          points: canvasState,
+        },
+      });
+    },
+    [canvasState, dispatch, height, state.currentScreenId, width]
+  );
+
+  // update canvas state depending upon the current selected screen
+  useEffect(() => {
+    if (canvasId !== state.currentScreenId) {
+      const screen = state.screens[state.currentScreenId];
+      setCanvasState(screen.points);
+      prevShapes.current = [];
+      setCanvasId(state.currentScreenId);
+      if (ctx) {
+        ctx.clearRect(
+          0,
+          0,
+          screen.screenWidth,
+          screen.screenHeight
+        );
+      }
+    }
+  }, [state.currentScreenId, canvasId, state.screens, canvasState, state, ctx]);
 
   // Custom hooks to draw shapes
   useLine({ board: canvasRef.current, ctx, updateState: handleCanvasState });
@@ -151,14 +187,14 @@ const DrawingBoard = () => {
       <canvas
         className="board-component"
         ref={canvasRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={width}
+        height={height}
       ></canvas>
       <canvas
         className="overlay-board-component"
         ref={overlayCanvasRef}
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={width}
+        height={height}
       ></canvas>
     </div>
   );

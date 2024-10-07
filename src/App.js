@@ -7,6 +7,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import Layers from "./section/layers/layers";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <div className="body-section">
           <Header />
           <DrawingBoard />
+          <Layers/>
         </div>
       </Router>
     </AppProvider>

@@ -4,7 +4,14 @@ import shapes from "../utils/shape-type";
 // INIITAL STATE
 const initialState = {
   shape: shapes.line,
-  screens: [],
+  screens: [
+    {
+      screenHeight: window.innerHeight,
+      screenWidth: window.innerWidth,
+      points: [],
+    },
+  ],
+  currentScreenId: 0,
 };
 
 // REDUCER
@@ -16,6 +23,15 @@ const reducer = (state, action) => {
       let newScreens = [...state.screens];
       newScreens[action.idx] = action.screen;
       return { ...state, screens: newScreens };
+    case "ADD_SCREEN":
+      const screen = {
+        screenHeight: window.innerHeight,
+        screenWidth: window.innerWidth,
+        points: [],
+      };
+      return { ...state, screens: [...state.screens, screen] };
+    case "CHANGE_SCREEN_ID":
+      return { ...state, currentScreenId: action.id };
     default:
       return state;
   }

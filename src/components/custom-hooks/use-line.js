@@ -9,6 +9,7 @@ function useLine({ board, ctx, updateState }) {
   const [lastCoordinate, setLastCoordinate] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
+
     if (!board || !ctx || state.shape !== shapes.line) return;
 
     const drawLine = (e) => {

@@ -13,7 +13,7 @@ import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import RadioButtonCheckedOutlinedIcon from "@mui/icons-material/RadioButtonCheckedOutlined";
 
 const Header = () => {
-  const { dispatch } = useContext(AppContext);
+  const { dispatch, state } = useContext(AppContext);
 
   const changeShape = (shape = "LINE") => {
     dispatch({ type: "SHAPE", shape });
@@ -21,41 +21,60 @@ const Header = () => {
 
   return (
     <div className="header">
-      <IconButton color="inherit" onClick={() => changeShape(shapes.line)}>
-        <BrushIcon color="inherit" fontSize="medium" />
+      <IconButton
+        color={shapes.line === state.shape ? "primary" : "inherit"}
+        onClick={() => changeShape(shapes.line)}
+      >
+        <BrushIcon fontSize="medium" />
       </IconButton>
-      <IconButton color="inherit" onClick={() => changeShape(shapes.circle)}>
-        <PanoramaFishEyeOutlinedIcon color="inherit" fontSize="medium" />
-      </IconButton>
-      <IconButton color="inherit" onClick={() => changeShape(shapes.rectangle)}>
-        <RectangleOutlinedIcon color="inherit" fontSize="medium" />
-      </IconButton>
-      <IconButton color="inherit" onClick={() => changeShape(shapes.square)}>
-        <SquareOutlinedIcon color="inherit" fontSize="medium" />
+
+      <IconButton
+        color={shapes.circle === state.shape ? "primary" : "inherit"}
+        onClick={() => changeShape(shapes.circle)}
+      >
+        <PanoramaFishEyeOutlinedIcon fontSize="medium" />
       </IconButton>
       <IconButton
-        color="inherit"
+        color={shapes.rectangle === state.shape ? "primary" : "inherit"}
+        onClick={() => changeShape(shapes.rectangle)}
+      >
+        <RectangleOutlinedIcon fontSize="medium" />
+      </IconButton>
+      <IconButton
+        color={shapes.square === state.shape ? "primary" : "inherit"}
+        onClick={() => changeShape(shapes.square)}
+      >
+        <SquareOutlinedIcon fontSize="medium" />
+      </IconButton>
+      <IconButton
+        color={
+          shapes.concentric_circle === state.shape ? "primary" : "inherit"
+        }
         onClick={() => changeShape(shapes.concentric_circle)}
       >
-        <RadioButtonCheckedOutlinedIcon color="inherit" fontSize="medium" />
+        <RadioButtonCheckedOutlinedIcon fontSize="medium" />
       </IconButton>
       <IconButton
-        color="inherit"
+        color={
+          shapes.concentric_recatangle === state.shape ? "primary" : "inherit"
+        }
         onClick={() => changeShape(shapes.concentric_recatangle)}
       >
-        <ContentCopyOutlinedIcon color="inherit" fontSize="medium" />
+        <ContentCopyOutlinedIcon fontSize="medium" />
       </IconButton>
       <IconButton
-        color="inherit"
+        color={
+          shapes.concentric_square === state.shape ? "primary" : "inherit"
+        }
         onClick={() => changeShape(shapes.concentric_square)}
       >
-        <AutoAwesomeMotionOutlinedIcon color="inherit" fontSize="medium" />
+        <AutoAwesomeMotionOutlinedIcon fontSize="medium" />
       </IconButton>
       <IconButton
-        color="inherit"
+        color={shapes.animated_circle === state.shape ? "primary" : "inherit"}
         onClick={() => changeShape(shapes.animated_circle)}
       >
-        <AnimationOutlinedIcon color="inherit" fontSize="medium" />
+        <AnimationOutlinedIcon fontSize="medium" />
       </IconButton>
     </div>
   );
