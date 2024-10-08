@@ -8,6 +8,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Layers from "./section/layers/layers";
+import StrokeStyleMenu from "./section/stroke-style-menu/stroke-style-menu";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Header />
           <DrawingBoard />
           <Layers/>
+          <StrokeStyleMenu/>
         </div>
       </Router>
     </AppProvider>

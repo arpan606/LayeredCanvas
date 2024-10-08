@@ -1,0 +1,16 @@
+  .stroke-styles {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .stroke-style-item {
+    width: 60px;
+    height: 20px;
+    cursor: pointer;
+    color:var(--primary)  !important;
+  }
+  
+  .stroke-style-item.selected {
+    border-bottom-color: var(--secondary) !important;
+  }
+  

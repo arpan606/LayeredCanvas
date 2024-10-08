@@ -18,8 +18,8 @@ const Layers = () => {
         {state.screens.map((screen, id) => (
           <Preview
             key={id}
-            width={200}
-            height={200}
+            width={100}
+            height={100}
             idx={id}
             screen={screen}
             onClick={toggleScreen}

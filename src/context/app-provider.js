@@ -12,6 +12,11 @@ const initialState = {
     },
   ],
   currentScreenId: 0,
+  strokeStyle: "",
+  strokeWidth: 0,
+  color: "#3700BC",
+  opacity: 1,
+  slopinessFactor: 0,
 };
 
 // REDUCER

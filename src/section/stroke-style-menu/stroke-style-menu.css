@@ -1,0 +1,17 @@
+.menu-component{
+    position: absolute;
+    bottom:5%;
+    left:1%;
+    width:200px;
+    height: fit-content;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    color:#fff;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    border: 2px solid transparent; 
+    box-shadow: 0 0 10px 5px var(--primary); 
+    backdrop-filter: blur(1px); 
+}
