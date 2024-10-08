@@ -27,10 +27,12 @@ const DrawingBoard = () => {
   const [canvasState, setCanvasState] = useState([]);
   const prevShapes = useRef([]);
   const [canvasId, setCanvasId] = useState(-1);
-  
+
+  const [ctx, setCanvasCtx] = useState(null);
+  const [overlayCtx, setCanvasOverlayCtx] = useState(null);
 
   // Initialize canvas contexts
-  const initializeCanvas = useCallback(() => {
+  useEffect(() => {
     const canvas = canvasRef.current;
     const overlayCanvas = overlayCanvasRef.current;
     if (!canvas || !overlayCanvas) return { ctx: null, overlayCtx: null };
@@ -38,15 +40,9 @@ const DrawingBoard = () => {
     const ctx = canvas.getContext("2d");
     const overlayCtx = overlayCanvas.getContext("2d");
 
-    ctx.strokeStyle = "blue";
-    ctx.lineWidth = 1;
-    overlayCtx.strokeStyle = "blue";
-    overlayCtx.lineWidth = 1;
-
-    return { ctx, overlayCtx };
+    setCanvasCtx(ctx);
+    setCanvasOverlayCtx(overlayCtx);
   }, []);
-
-  const { ctx, overlayCtx } = initializeCanvas();
 
   // Render all shapes
   useEffect(() => {
@@ -131,18 +127,34 @@ const DrawingBoard = () => {
     if (canvasId !== state.currentScreenId) {
       const screen = state.screens[state.currentScreenId];
       setCanvasState(screen.points);
+
       prevShapes.current = [];
       setCanvasId(state.currentScreenId);
+
       if (ctx) {
-        ctx.clearRect(
-          0,
-          0,
-          screen.screenWidth,
-          screen.screenHeight
-        );
+        ctx.clearRect(0, 0, screen.screenWidth, screen.screenHeight);
       }
     }
   }, [state.currentScreenId, canvasId, state.screens, canvasState, state, ctx]);
+
+  // update ctx styles
+  useEffect(() => {
+    if (!ctx || !overlayCtx) return;
+
+    ctx.strokeStyle = state.color;
+    ctx.lineWidth = state.strokeWidth;
+
+    overlayCtx.strokeStyle = state.color;
+    overlayCtx.lineWidth = state.strokeWidth;
+  }, [
+    state.strokeStyle,
+    state.strokeWidth,
+    state.color,
+    state.opacity,
+    state.sloppinessFactor,
+    ctx,
+    overlayCtx,
+  ]);
 
   // Custom hooks to draw shapes
   useLine({ board: canvasRef.current, ctx, updateState: handleCanvasState });

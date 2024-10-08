@@ -37,6 +37,16 @@ const reducer = (state, action) => {
       return { ...state, screens: [...state.screens, screen] };
     case "CHANGE_SCREEN_ID":
       return { ...state, currentScreenId: action.id };
+    case "STROKE_STYLE":
+      return { ...state, strokeStyle: action.style };
+    case "STROKE_WIDTH":
+      return { ...state, strokeWidth: action.width };
+    case "OPACITY":
+      return { ...state, opacity: action.opacity };
+    case "SLOPPINESS_FACTOR":
+      return { ...state, slopinessFactor: action.slopinessFactor };
+    case "COLOR":
+      return { ...state, color: action.color };
     default:
       return state;
   }
